@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The AI Coach for Fudge Makers</title>
+<meta name="description" content="Turns a loved craft into a real business for Fudge Makers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<style>:root {
+  --bg-primary: #1A0A2E;
+  --bg-secondary: #2D1B4E;
+  --bg-card: #3D2660;
+  --accent: #C9B8E8;
+  --accent-dark: #8B5CF6;
+  --text-primary: #FFFFFF;
+  --text-muted: #A89BC2;
+  --border: #5B3F8C;
+  --green: #22C55E;
+  --bg-gradient: linear-gradient(135deg, #1A0A2E 0%, #0D0D1A 100%);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Nunito', system-ui, sans-serif;
+  background: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-primary);
+  line-height: 1.65;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .serif { font-family: 'Playfair Display', Georgia, serif; }
+
+.wrap { max-width: 820px; margin: 0 auto; padding: 24px 20px 96px; }
+.wrap-wide { max-width: 1120px; }
+
+/* ---- hero ---- */
+.hero { text-align: center; padding: 40px 12px 28px; }
+.hero h1 { font-size: clamp(30px, 6vw, 52px); line-height: 1.1; font-weight: 800; }
+.hero .sub { color: var(--accent); margin-top: 14px; font-size: clamp(16px, 2.6vw, 20px); }
+.hero .kicker {
+  display: inline-block; letter-spacing: .14em; text-transform: uppercase;
+  font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 14px;
+}
+
+/* ---- cards / panels ---- */
+.panel {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 26px 24px;
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+  margin-bottom: 20px;
+}
+.panel h2 { font-size: clamp(22px, 4vw, 30px); margin-bottom: 6px; }
+.panel .lead { color: var(--text-muted); margin-bottom: 22px; }
+
+.badge {
+  display: inline-block; font-size: 12px; font-weight: 800; letter-spacing: .04em;
+  padding: 5px 12px; border-radius: 999px; margin-bottom: 14px;
+  background: rgba(139,92,246,.18); color: var(--accent); border: 1px solid var(--border);
+}
+
+/* ---- forms ---- */
+label.field { display: block; margin-bottom: 18px; }
+label.field .q { display: block; font-weight: 700; margin-bottom: 8px; font-size: 16px; }
+input[type=text], textarea {
+  width: 100%; font-family: inherit; font-size: 16px; color: var(--text-primary);
+  background: var(--bg-primary); border: 1px solid var(--border); border-radius: 12px;
+  padding: 13px 14px; transition: border-color .15s, box-shadow .15s;
+}
+textarea { min-height: 84px; resize: vertical; }
+input[type=text]:focus, textarea:focus {
+  outline: none; border-color: var(--accent-dark);
+  box-shadow: 0 0 0 3px rgba(139,92,246,.28);
+}
+::placeholder { color: rgba(168,155,194,.6); }
+
+/* ---- multiple choice ---- */
+.choices { display: grid; gap: 10px; }
+.choice {
+  display: flex; align-items: center; gap: 12px; cursor: pointer;
+  background: var(--bg-primary); border: 1px solid var(--border);
+  border-radius: 12px; padding: 13px 15px; transition: all .14s;
+}
+.choice:hover { border-color: var(--accent-dark); transform: translateY(-1px); }
+.choice input { position: absolute; opacity: 0; pointer-events: none; }
+.choice .dot {
+  flex: 0 0 auto; width: 20px; height: 20px; border-radius: 50%;
+  border: 2px solid var(--border); position: relative; transition: all .14s;
+}
+.choice.sel { border-color: var(--accent-dark); background: rgba(139,92,246,.16); }
+.choice.sel .dot { border-color: var(--accent-dark); }
+.choice.sel .dot::after {
+  content: ''; position: absolute; inset: 3px; border-radius: 50%; background: var(--accent-dark);
+}
+.choice .txt { font-size: 15.5px; }
+
+/* ---- buttons ---- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font-family: inherit; font-weight: 800; font-size: 17px; cursor: pointer;
+  border: none; border-radius: 14px; padding: 15px 26px; width: 100%;
+  color: #fff; background: linear-gradient(135deg, var(--accent-dark), #6D28D9);
+  box-shadow: 0 10px 26px rgba(139,92,246,.4); transition: transform .12s, box-shadow .12s;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: 0 14px 32px rgba(139,92,246,.5); }
+.btn:active { transform: translateY(0); }
+.btn.secondary {
+  background: transparent; color: var(--accent); border: 1px solid var(--border);
+  box-shadow: none; font-size: 15px; padding: 12px 20px; width: auto;
+}
+.btn.secondary:hover { border-color: var(--accent-dark); transform: none; box-shadow: none; }
+.btn-row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin-top: 22px; }
+.btn-row .btn { flex: 1; min-width: 200px; }
+
+.progress { display: flex; gap: 6px; margin-bottom: 22px; }
+.progress .step { flex: 1; height: 5px; border-radius: 999px; background: var(--border); }
+.progress .step.on { background: var(--accent-dark); }
+
+/* ---- report ---- */
+.report-section { margin-bottom: 26px; }
+.report-section h3 {
+  font-size: 22px; margin-bottom: 10px; color: var(--accent);
+  display: flex; align-items: center; gap: 10px;
+}
+.report-section p { font-size: 16.5px; }
+.report-section ol, .report-section ul { margin: 6px 0 0 4px; padding-left: 22px; }
+.report-section li { margin-bottom: 12px; font-size: 16px; }
+.moves { display: grid; gap: 12px; }
+.move {
+  background: var(--bg-primary); border: 1px solid var(--border);
+  border-radius: 14px; padding: 15px 17px;
+}
+.move .when { font-weight: 800; color: var(--accent); display: block; margin-bottom: 4px; font-size: 14px; letter-spacing: .03em; text-transform: uppercase; }
+
+.disclaimer {
+  font-size: 13.5px; color: var(--text-muted); font-style: italic;
+  border-left: 3px solid var(--border); padding: 10px 0 10px 14px; margin: 4px 0 20px;
+}
+
+/* ---- go deeper with claude, feature block ---- */
+.claude-block {
+  background: linear-gradient(160deg, rgba(139,92,246,.16), rgba(61,38,96,.35));
+  border: 1px solid var(--accent-dark);
+  border-radius: 18px; padding: 22px 20px; margin: 30px 0 24px;
+  box-shadow: 0 14px 40px rgba(139,92,246,.18);
+}
+.claude-kicker {
+  display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 8px;
+}
+.claude-block h3 { font-size: 24px; margin-bottom: 8px; color: var(--text-primary); }
+.claude-block .lead { color: var(--text-muted); margin-bottom: 16px; font-size: 15px; }
+.claude-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+.claude-actions .btn { width: auto; flex: 1 1 auto; min-width: 190px; }
+.claude-cta.ok { background: linear-gradient(135deg, var(--green), #16A34A); box-shadow: 0 10px 26px rgba(34,197,94,.36); }
+.claude-open { display: inline-flex; text-decoration: none; align-items: center; justify-content: center; }
+@media (max-width: 560px) { .claude-actions .btn { min-width: 100%; } }
+
+/* ---- prompts ---- */
+.prompt {
+  background: var(--bg-primary); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 17px; margin-bottom: 14px;
+}
+.prompt .head { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 10px; }
+.prompt .head h4 { font-family: 'Nunito', sans-serif; font-size: 16px; font-weight: 800; }
+.prompt pre {
+  white-space: pre-wrap; word-wrap: break-word; font-family: inherit;
+  font-size: 14.5px; color: var(--text-muted); line-height: 1.6;
+}
+.copy {
+  flex: 0 0 auto; cursor: pointer; font-family: inherit; font-weight: 700; font-size: 13px;
+  border: 1px solid var(--border); background: rgba(139,92,246,.14); color: var(--accent);
+  border-radius: 10px; padding: 8px 14px; transition: all .14s;
+}
+.copy:hover { border-color: var(--accent-dark); }
+.copy.done { background: rgba(34,197,94,.16); color: var(--green); border-color: var(--green); }
+
+/* ---- vault homepage ---- */
+.toolbar { position: sticky; top: 0; z-index: 20; padding: 14px 0 10px;
+  background: linear-gradient(180deg, rgba(13,13,26,.96), rgba(13,13,26,.72)); backdrop-filter: blur(6px); }
+.search {
+  width: 100%; font-size: 17px; padding: 15px 18px; border-radius: 14px;
+  background: var(--bg-secondary); border: 1px solid var(--border); color: #fff;
+}
+.search:focus { outline: none; border-color: var(--accent-dark); box-shadow: 0 0 0 3px rgba(139,92,246,.25); }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.chip {
+  cursor: pointer; font-family: inherit; font-weight: 700; font-size: 13.5px;
+  border: 1px solid var(--border); background: transparent; color: var(--text-muted);
+  border-radius: 999px; padding: 8px 15px; transition: all .14s; white-space: nowrap;
+}
+.chip:hover { color: var(--text-primary); border-color: var(--accent-dark); }
+.chip.on { background: var(--accent-dark); color: #fff; border-color: var(--accent-dark); }
+.count { color: var(--text-muted); font-size: 14px; margin: 16px 2px 10px; }
+
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 16px; }
+.card {
+  background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+  padding: 20px; cursor: pointer; transition: transform .14s, box-shadow .14s, border-color .14s;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.card:hover { transform: translateY(-3px); border-color: var(--accent-dark); box-shadow: 0 16px 36px rgba(0,0,0,.4); }
+.card .tag { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.card h3 { font-size: 19px; line-height: 1.25; }
+.card p { color: var(--text-muted); font-size: 14.5px; }
+.load-more { margin: 26px auto 0; display: block; max-width: 320px; }
+.empty { text-align: center; color: var(--text-muted); padding: 50px 20px; }
+
+.backlink { display: inline-flex; align-items: center; gap: 8px; cursor: pointer; color: var(--accent);
+  font-weight: 700; background: none; border: none; font-family: inherit; font-size: 15px; margin-bottom: 18px; padding: 6px 0; }
+.backlink:hover { text-decoration: underline; }
+
+.footer { text-align: center; color: var(--text-muted); font-size: 13px; padding: 30px 10px 10px; border-top: 1px solid var(--border); margin-top: 34px; }
+.footer .disclaimer-foot { font-style: italic; max-width: 640px; margin: 0 auto 10px; line-height: 1.5; }
+.footer .powered { font-size: 13px; letter-spacing: .02em; }
+.footer .powered strong { color: var(--accent); font-weight: 800; }
+
+@media (max-width: 560px) {
+  .wrap { padding: 16px 15px 80px; }
+  .panel { padding: 22px 17px; border-radius: 16px; }
+  .btn-row .btn { min-width: 100%; }
+  .grid { grid-template-columns: 1fr; }
+  .prompt .head { flex-direction: column; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>window.COACH={"title":"The AI Coach for Fudge Makers","description":"Turns a loved craft into a real business for Fudge Makers.","type":"niche","focus":{"title":"The AI Coach for Fudge Makers","niche":"Fudge Makers","offer":"fudge","one":"fudge maker"},"questions":[{"id":"stage","type":"mc","text":"Where are you with your handmade fudge?","options":[{"value":"hobby","label":"It is still a loved hobby"},{"value":"side","label":"A side thing making a little"},{"value":"growing","label":"Growing into a real business"},{"value":"busy","label":"Busy and a bit overwhelmed"}]},{"id":"goal","type":"mc","text":"What do you most want next?","options":[{"value":"sales","label":"More steady sales"},{"value":"price","label":"To charge what my work is worth"},{"value":"wholesale","label":"To sell in bulk or wholesale"},{"value":"brand","label":"A brand people recognise"}]},{"id":"obstacle","type":"mc","text":"What is hardest as one of the Fudge Makers?","options":[{"value":"pricing","label":"Pricing handmade work fairly"},{"value":"time","label":"The making takes forever"},{"value":"marketing","label":"Getting it in front of buyers"},{"value":"stand","label":"Standing out from cheaper mass made"}]},{"id":"d1","type":"mc","text":"Where do you mostly sell your fudge?","options":[{"value":"online","label":"An online shop"},{"value":"markets","label":"Markets and fairs"},{"value":"social","label":"Direct through social"},{"value":"mix","label":"A mix of places"}]},{"id":"d2","type":"mc","text":"How do you price your pieces now?","options":[{"value":"guess","label":"A bit of a guess"},{"value":"materials","label":"Materials plus a little"},{"value":"market","label":"What the market seems to bear"},{"value":"value","label":"Based on the value and love in them"}]},{"id":"t1","type":"text","text":"What is the story or heart behind your fudge?","placeholder":"I started making these because..."}]};window.PACK={"diagnosis":["Here is the honest picture, {{name}}. {{subject}} started as something you love, and that love is the reason people respond to handmade work at all. It also makes it very hard to charge properly, because you count the materials and forget the hours. With {{nicheQ}}, you told me the thing weighing on you most is {{challengeQ}}, and when you said {{obstacleQ}} it fitted perfectly. Nothing is wrong here. You simply have a hobby's numbers and a business's ambitions.","Let me reflect back what I see, {{name}}. Money is coming in, which proves strangers will pay for what you make. That is the hardest thing to prove and it is already behind you. The wobble showing up is {{obstacleQ}}, and it sits with {{challengeQ}}. Side stage usually means you are making whatever gets ordered, in whatever quantity, at whatever price. The next step is not more effort. It is deciding what you will and will not make.","Here is what your answers reveal, {{name}}. You have crossed from making things to running a business, and the two need very different habits. Orders are steady enough that guessing now costs you real money. What is holding the ceiling down is {{obstacleQ}}, and paired with {{challengeQ}} it points at production rather than demand. You currently price {{d2Label}}, and that is the number most worth fixing.","Let me be straight with you, {{name}}, because busy is its own kind of stuck. {{subject}} sells, and you are paying for it with your evenings. The friction left is {{obstacleQ}}, and against {{challengeQ}} the work now is to make less and earn more. That means a tighter range, batching, and letting go of the pieces that eat hours and return pennies. Handmade does not have to mean handmade one at a time."],"strategy":["So here is the approach. \"{{goalLabel}}\" comes from a narrow range done brilliantly, not a wide one done occasionally. Choose three pieces you can make well and repeat, photograph them properly in daylight against a plain background, and put them everywhere you sell. For {{audience}}, seeing the same recognisable pieces again and again is what turns a browse into a purchase.","Here is the strategy. \"{{goalLabel}}\" starts with counting honestly. Add your materials, your packaging, the platform and card fees, and then pay yourself a real hourly rate for the making, the photographing and the posting. Whatever that total is, that is your floor. For {{audience}}, the story of who made it and why is what justifies the price, so tell it beside the price, not instead of it.","This is the move for you. \"{{goalLabel}}\" needs different maths and a much smaller range. Work out a wholesale price at roughly half your retail and check it still pays you, because if it does not, the answer is to raise retail first. Approach a handful of independent shops whose customers look like {{audience}}, with a simple line sheet, clear minimums and realistic lead times.","Here is the refined approach. \"{{goalLabel}}\" is built from repetition people can spot across a room. Keep your packaging, labels, colours and photography style consistent on every single piece. Put a card in every parcel with your name and where to find you. For {{audience}}, recognising your work before they see your name is what a small brand actually feels like."],"stepStage":["Work out the true cost of one piece, including your own time at a proper hourly rate. Just the number, no changes yet.","Pick the three pieces you most enjoy making that also sell, and let the rest quietly retire.","Time yourself making one full batch, start to finish including packing, so you know what your day actually produces.","List everything you make and mark the profit per hour on each. The bottom third is where your evenings are going."],"stepGoal":["Reshoot your three best sellers in daylight on a plain background, and use those photos everywhere you sell {{subject}}.","Raise the price of one piece to your properly calculated number and offer it to the next person who asks.","Write a one page line sheet with photos, wholesale prices, minimum order and lead time, then send it to three local shops.","Choose your packaging, label and photo style, then apply the same three choices to every piece from now on."],"stepExtra":["Never let a customer walk away without a way back to you. A small card in every parcel with your shop name is the cheapest repeat business you will ever buy."],"week":["This week, just do the sums on one piece. Understanding what it really costs you is the whole task.","This week, decide which three things you will keep making, and stop taking orders for the rest.","This week, make one batch and time it honestly, including the packing and the post office trip.","This week, find the one product eating the most hours for the least return and take it off the list."],"month":["This month, aim for a small tight range, properly photographed, selling steadily {{d1Label}}.","This month, have your new prices live and quoted to at least three customers, so the number stops feeling strange.","This month, get your line sheet finished and in front of at least three shops.","This month, make every parcel that leaves your house look unmistakably like it came from you."]};</script>
+<script>/* Standalone single coach runtime.
+   Reads one global:
+     COACH  : the single coach object { title, description, type, family, focus, questions }
+     PACK   : that coach's Claude crafted report content pack (or null)
+   There is no router, no vault, no search, no navigation, and no branding.
+   The report and prompt engine is identical to the vault, so output matches.
+   All logic runs locally, with no network calls. */
+(function () {
+  'use strict';
+  var COACH = window.COACH;
+  var PACK = window.PACK || null;
+  var root = document.getElementById('app');
+  var DISCLAIMER = 'For educational and informational purposes only. This is not legal, financial, or medical advice.';
+
+  function siteFooter() {
+    var f = el('div', 'footer');
+    f.appendChild(el('p', 'disclaimer-foot', DISCLAIMER));
+    return f;
+  }
+
+  /* ===================== engine: report ===================== */
+
+  function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+  function quote(s, fb) { var v = (s == null ? '' : String(s)).trim(); return '"' + (v || fb) + '"'; }
+  function fillTokens(tpl, c) {
+    return String(tpl).replace(/\{\{(\w+)\}\}/g, function (_, k) { return c[k] == null ? '' : String(c[k]); });
+  }
+
+  function pickOption(coach, answers, id) {
+    var q = null, i;
+    for (i = 0; i < coach.questions.length; i++) if (coach.questions[i].id === id) { q = coach.questions[i]; break; }
+    if (!q) return { index: 0, label: '', value: '' };
+    var val = answers[id];
+    if (q.type !== 'mc' || !q.options) return { index: 0, label: val || '', value: val || '' };
+    var idx = -1;
+    for (i = 0; i < q.options.length; i++) if (q.options[i].value === val) { idx = i; break; }
+    if (idx < 0) idx = 0;
+    return { index: idx, label: q.options[idx].label, value: q.options[idx].value };
+  }
+
+  function subjectOf(coach) {
+    if (coach.type === 'topic') return { subject: coach.focus.phrase, title: coach.focus.title };
+    return { subject: 'your ' + coach.focus.offer, title: coach.focus.title };
+  }
+
+  var DIAGNOSIS = [
+    function (c) { return 'Here is the honest picture, ' + c.name + '. ' + cap(c.subject) + ' is right at the beginning, and that is completely normal at this stage. You described your business as ' + c.nicheQ + ', and you told me the thing weighing on you most is ' + c.challengeQ + '. Your answers line up with that. When you said ' + c.obstacleQ + ', that tells me the block is more about confidence than ability. You are not behind. You simply have not built this bit yet, and it is very buildable.'; },
+    function (c) { return 'Let me reflect back what I am seeing, ' + c.name + '. You have made a real start with ' + c.subject + ', which already puts you ahead of most people who only think about it. With ' + c.nicheQ + ', the wobble showing up in your answers is ' + c.obstacleQ + ', and that fits the challenge you named, ' + c.challengeQ + '. The foundations are there. What you need now is a little more shape and a little more nerve, not a full rebuild.'; },
+    function (c) { return 'Here is what your answers reveal, ' + c.name + '. You are further along with ' + c.subject + ' than you give yourself credit for. You are established, yet something is holding the ceiling down, and you named it yourself: ' + c.obstacleQ + '. Paired with the challenge you shared, ' + c.challengeQ + ', this tells me you do not have a starting problem, you have a refining problem. Those are the nicer ones to solve, because the hard part is already behind you.'; },
+    function (c) { return 'Let me be straight with you, ' + c.name + ', because you have earned it. ' + cap(c.subject) + ' already works in your business, ' + c.nicheQ + '. You are in polish mode, and the one friction point left is ' + c.obstacleQ + '. Set against the challenge you mentioned, ' + c.challengeQ + ', this is a fine tuning job. Small, deliberate moves from here will give you outsized results, because you are building on something solid.'; }
+  ];
+
+  var STRATEGY = [
+    function (c) { return 'So here is the approach I want for you. Keep it small and steady. Your aim of "' + c.goalLabel + '" is the right first target, so we build everything around that one outcome and ignore the rest for now. Speak only to ' + c.audience + ', use the plainest words you can, and let ' + c.subject + ' be simple rather than clever. A simple thing that exists beats a perfect thing that never ships. We are going for momentum, not polish.'; },
+    function (c) { return 'Here is the strategy that fits you. You picked "' + c.goalLabel + '" as the win, so we sharpen what you already have rather than starting over. We tighten ' + c.subject + ' around ' + c.audience + ' specifically, cut anything fuzzy, and add just enough structure that it works without you thinking about it. You do not need more, you need clearer. Clarity is what moves the needle from here.'; },
+    function (c) { return 'This is the move for your situation. Your goal of "' + c.goalLabel + '" tells me you are ready to raise the ceiling, so we stop tinkering at the edges and make one bold, deliberate change to ' + c.subject + '. We lean into what already sets you apart for ' + c.audience + ', and we let go of the safe, quiet version. You have the track record to back a bigger swing now. This is where confidence pays.'; },
+    function (c) { return 'Here is the refined approach. With "' + c.goalLabel + '" as your aim and a business that already works, the strategy is leverage, not effort. We take the strongest part of ' + c.subject + ', make it repeatable, and remove you from the parts that do not need you. For ' + c.audience + ', this shows up as a smoother, more premium experience. You earn more by doing less of the wrong things, not more of everything.'; }
+  ];
+
+  function actionSteps(c, pack) {
+    var steps = [];
+    if (pack) {
+      steps.push(fillTokens(pack.stepStage[c.stageLevel], c));
+      steps.push(fillTokens(pack.stepGoal[c.goalLevel], c));
+      steps.push('Name your block out loud. You said ' + c.obstacleQ + '. Write down the very next tiny step that shrinks it, and do only that.');
+      (pack.stepExtra || []).forEach(function (s) { steps.push(fillTokens(s, c)); });
+      if (c.d1Label) steps.push('You told me "' + c.d1Label + '". Use that as your starting point and make one improvement to it this week.');
+      steps.push('Have one honest conversation with someone like ' + c.audience + ' and ask what they truly want. Let their words reshape ' + c.subject + '.');
+      steps.push('Keep the challenge you named, ' + c.challengeQ + ', in view. Each Friday, ask one question: did this week make that lighter? Adjust and carry on.');
+      return steps.slice(0, 7);
+    }
+    steps.push([
+      'Write one clear sentence that finishes "My work helps ' + c.audience + ' to..." and pin it where you can see it.',
+      'Take the version of ' + c.subject + ' you have and cut it back to the one part ' + c.audience + ' actually care about.',
+      'List the three things about ' + c.subject + ' that already work, then protect those before you change anything else.',
+      'Audit ' + c.subject + ' once, calmly, and mark only the single weakest link to improve this month.'
+    ][c.stageLevel]);
+    steps.push([
+      'Pick the one smallest action that moves you towards "' + c.goalLabel + '" and put it in your diary for tomorrow.',
+      'Rewrite the way you describe ' + c.subject + ' so a busy person gets it in five seconds.',
+      'Make the one bold change your "' + c.goalLabel + '" goal needs, even though a quieter version feels safer.',
+      'Turn your best result into a repeatable step so "' + c.goalLabel + '" happens on purpose, not by luck.'
+    ][c.goalLevel]);
+    steps.push('Name your block out loud. You said ' + c.obstacleQ + '. Write down the very next tiny step that shrinks it, and do only that.');
+    if (c.d1Label) steps.push('You told me "' + c.d1Label + '". Use that as your starting point and make one improvement to it this week.');
+    if (c.d2Label) steps.push('Given "' + c.d2Label + '", decide one small rule you will hold to for the next thirty days, then hold it.');
+    steps.push('Have one honest conversation with someone like ' + c.audience + ' and ask what they truly want. Let their words reshape ' + c.subject + '.');
+    steps.push('Keep the challenge you named, ' + c.challengeQ + ', in view. Each Friday, ask one question: did this week make that lighter? Adjust and carry on.');
+    return steps.slice(0, 7);
+  }
+
+  function nextMoves(c, pack) {
+    if (pack) {
+      return {
+        week: fillTokens(pack.week[c.stageLevel], c),
+        month: fillTokens(pack.month[c.goalLevel], c),
+        quarter: 'This quarter, the north star is "' + c.goalLabel + '". If every week nudges your business a little closer to that, and eases ' + c.challengeQ + ' a little more, you are winning. Slow and steady wins this. You have got this, ' + c.name + '.'
+      };
+    }
+    var week = [
+      'This week, keep it tiny. Do the first action step and nothing more. One small win beats a big plan you never start.',
+      'This week, sharpen one thing about ' + c.subject + ' and share it with a single person for honest feedback.',
+      'This week, make the one change you have been circling. Ship it before you feel ready, then watch what happens.',
+      'This week, remove one thing from your plate so the strongest part of ' + c.subject + ' gets your best attention.'
+    ][c.stageLevel];
+    var month = [
+      'This month, aim to have a simple, working version of ' + c.subject + ' live and in front of ' + c.audience + ', even if it is imperfect.',
+      'This month, get ' + c.subject + ' clear and consistent enough that you are no longer reinventing it each time.',
+      'This month, run your bolder version properly and measure it against "' + c.goalLabel + '" with real numbers, not feelings.',
+      'This month, turn your best move into a repeatable system so it keeps paying off without you.'
+    ][c.goalLevel];
+    var quarter = 'This quarter, the north star is "' + c.goalLabel + '". If every week nudges your business a little closer to that, and eases ' + c.challengeQ + ' a little more, you are winning. Slow and steady wins this. You have got this, ' + c.name + '.';
+    return { week: week, month: month, quarter: quarter };
+  }
+
+  function generateReport(coach, intake, answers) {
+    var s = subjectOf(coach);
+    var stage = pickOption(coach, answers, 'stage');
+    var goal = pickOption(coach, answers, 'goal');
+    var obstacle = pickOption(coach, answers, 'obstacle');
+    var d1 = pickOption(coach, answers, 'd1');
+    var d2 = pickOption(coach, answers, 'd2');
+    var name = (intake.name || '').trim() || 'friend';
+    var niche = (intake.niche || '').trim() || 'your business';
+    var audience = (intake.audience || '').trim() || 'your ideal customers';
+    var challenge = (intake.challenge || '').trim() || 'getting more consistent';
+    var obstacleLabel = obstacle.label || 'the thing holding you back';
+    var c = {
+      name: name, niche: niche, nicheQ: quote(niche, 'your business'),
+      audience: audience, challenge: challenge, challengeQ: quote(challenge, 'getting more consistent'),
+      subject: s.subject, title: s.title,
+      stageLevel: stage.index, goalLevel: goal.index,
+      obstacleLabel: obstacleLabel, obstacleQ: '"' + obstacleLabel + '"',
+      goalLabel: goal.label || 'your goal', d1Label: d1.label, d2Label: d2.label
+    };
+    return {
+      diagnosis: PACK ? fillTokens(PACK.diagnosis[c.stageLevel], c) : DIAGNOSIS[c.stageLevel](c),
+      strategy: PACK ? fillTokens(PACK.strategy[c.goalLevel], c) : STRATEGY[c.goalLevel](c),
+      actionSteps: actionSteps(c, PACK),
+      nextMoves: nextMoves(c, PACK)
+    };
+  }
+
+  /* ===================== engine: prompts ===================== */
+
+  function specialityOf(coach) { return coach.type === 'topic' ? coach.focus.word : 'helping ' + coach.focus.niche; }
+
+  function generatePrompts(coach, intake, answers) {
+    var s = subjectOf(coach);
+    var niche = (intake.niche || '').trim() || 'my business';
+    var audience = (intake.audience || '').trim() || 'my ideal customers';
+    var challenge = (intake.challenge || '').trim() || 'getting more consistent';
+    var goal = pickOption(coach, answers, 'goal').label || 'grow my business';
+    var obstacle = pickOption(coach, answers, 'obstacle').label || 'the thing holding me back';
+    var speciality = specialityOf(coach);
+    var t1 = (answers.t1 || '').trim();
+    var ctx = 'Here is my situation. My business is ' + niche + '. I help ' + audience + '. My biggest challenge right now is ' + challenge + '. When it comes to ' + s.subject + ', my main goal is "' + goal + '" and the thing that trips me up is "' + obstacle + '".';
+    var out = [];
+    out.push({ title: 'Get a tailored action plan',
+      text: 'You are an experienced, warm business coach who specialises in ' + speciality + '. ' + ctx + '\n\nBased on this, give me a clear, encouraging action plan of seven steps to move towards my goal of "' + goal + '". For each step, tell me exactly what to do and why it matters for someone like me. Keep the tone friendly and practical. Do not use jargon.' });
+    out.push({ title: 'Rewrite how I talk about this',
+      text: ctx + '\n\nHelp me describe ' + s.subject + ' in a way that instantly clicks with ' + audience + '. Give me three versions: one short and punchy, one warm and story led, and one clear and direct. Each should speak to my goal of "' + goal + '" without sounding salesy or over the top.' });
+    out.push({ title: 'Break through my sticking point',
+      text: ctx + '\n\nMy honest block is "' + obstacle + '". Coach me through it. Ask me two or three sharp questions to get to the real cause, then give me a simple three step way to move past it this week. Be kind but do not let me off the hook.' });
+    out.push({ title: 'Plan my next thirty days',
+      text: ctx + '\n\nBuild me a realistic thirty day plan focused on ' + s.subject + ' and my goal of "' + goal + '". Break it into four weekly themes with two or three small tasks each. Assume I am busy and easily overwhelmed, so keep each week light and doable.' + (t1 ? ' For context, here is something true about my work: ' + t1 + '.' : '') });
+    if (t1) out.push({ title: 'Turn my own words into content',
+      text: ctx + '\n\nHere is something I wrote in my own words: "' + t1 + '". Turn this into five pieces of content that would attract ' + audience + '. Give me the hook and the main point for each. Keep my voice, keep it real, and tie each one back to ' + s.subject + '.' });
+    return out;
+  }
+
+  /* ===================== dom helpers ===================== */
+
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (m) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+    });
+  }
+  function scrollTop() { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function fallbackCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.focus(); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+
+  /* ===================== coach session ===================== */
+
+  function renderCoach(coach) {
+    document.title = coach.focus.title;
+    var intake = {}, answers = {}, stepEl;
+    root.innerHTML = '';
+    var wrap = el('div', 'wrap');
+    root.appendChild(wrap);
+
+    var head = el('div', 'hero');
+    head.style.padding = '10px 6px 20px';
+    head.appendChild(el('h1', null, esc(coach.focus.title)));
+    head.appendChild(el('div', 'sub', esc(coach.description)));
+    wrap.appendChild(head);
+
+    var panel = el('div', 'panel');
+    wrap.appendChild(panel);
+    stepEl = el('div');
+    panel.appendChild(stepEl);
+    wrap.appendChild(siteFooter());
+
+    function progress(active) {
+      var p = el('div', 'progress');
+      [0, 1, 2].forEach(function (i) { p.appendChild(el('div', 'step' + (i <= active ? ' on' : ''))); });
+      return p;
+    }
+
+    function stepIntake() {
+      stepEl.innerHTML = '';
+      stepEl.appendChild(progress(0));
+      stepEl.appendChild(el('h2', null, 'First, tell me about your business'));
+      stepEl.appendChild(el('p', 'lead', 'Just the basics, so your report is truly yours. There are no wrong answers here.'));
+      var fields = [
+        { k: 'name', q: 'What is your first name?', ph: 'Sarah', ta: false },
+        { k: 'niche', q: 'What is your business, in a few words?', ph: 'a handmade candle brand', ta: false },
+        { k: 'audience', q: 'Who do you help or sell to?', ph: 'busy mums who love a calm home', ta: false },
+        { k: 'challenge', q: 'What is your single biggest challenge right now?', ph: 'I keep undercharging and feel stretched thin', ta: true }
+      ];
+      fields.forEach(function (f) {
+        var lab = el('label', 'field');
+        lab.appendChild(el('span', 'q', esc(f.q)));
+        var input = f.ta ? el('textarea') : el('input');
+        if (!f.ta) input.type = 'text';
+        input.placeholder = f.ph;
+        input.value = intake[f.k] || '';
+        input.oninput = function () { intake[f.k] = input.value; };
+        lab.appendChild(input);
+        stepEl.appendChild(lab);
+      });
+      var row = el('div', 'btn-row');
+      var next = el('button', 'btn', 'Next, my coaching questions &rarr;');
+      next.onclick = function () {
+        if (!(intake.name || '').trim()) { alert('Pop your first name in so I can make this personal.'); return; }
+        stepQuestions();
+        scrollTop();
+      };
+      row.appendChild(next);
+      stepEl.appendChild(row);
+    }
+
+    function stepQuestions() {
+      stepEl.innerHTML = '';
+      stepEl.appendChild(progress(1));
+      stepEl.appendChild(el('h2', null, 'Your coaching questions'));
+      stepEl.appendChild(el('p', 'lead', 'Answer honestly. Your report changes based on what you pick.'));
+      coach.questions.forEach(function (q) {
+        var lab = el('label', 'field');
+        lab.appendChild(el('span', 'q', esc(q.text)));
+        if (q.type === 'mc') {
+          var group = el('div', 'choices');
+          q.options.forEach(function (o) {
+            var choice = el('label', 'choice' + (answers[q.id] === o.value ? ' sel' : ''));
+            var radio = el('input');
+            radio.type = 'radio'; radio.name = q.id; radio.value = o.value;
+            radio.checked = answers[q.id] === o.value;
+            radio.onchange = function () {
+              answers[q.id] = o.value;
+              group.querySelectorAll('.choice').forEach(function (n) { n.classList.remove('sel'); });
+              choice.classList.add('sel');
+            };
+            choice.appendChild(radio);
+            choice.appendChild(el('span', 'dot'));
+            choice.appendChild(el('span', 'txt', esc(o.label)));
+            group.appendChild(choice);
+          });
+          lab.appendChild(group);
+        } else {
+          var input = el('textarea');
+          input.placeholder = q.placeholder || '';
+          input.value = answers[q.id] || '';
+          input.oninput = function () { answers[q.id] = input.value; };
+          lab.appendChild(input);
+        }
+        stepEl.appendChild(lab);
+      });
+      var row = el('div', 'btn-row');
+      var back = el('button', 'btn secondary', '&larr; Back');
+      back.onclick = function () { stepIntake(); scrollTop(); };
+      var go = el('button', 'btn', 'Get My Coaching Report');
+      go.onclick = function () {
+        var missing = coach.questions.filter(function (q) { return q.type === 'mc' && !answers[q.id]; });
+        if (missing.length) { alert('Just pick an answer for each question so your report fits you.'); return; }
+        stepReport();
+        scrollTop();
+      };
+      row.appendChild(back);
+      row.appendChild(go);
+      stepEl.appendChild(row);
+    }
+
+    function stepReport() {
+      var report = generateReport(coach, intake, answers);
+      var prompts = generatePrompts(coach, intake, answers);
+      stepEl.innerHTML = '';
+      stepEl.appendChild(progress(2));
+      stepEl.appendChild(el('h2', null, esc((intake.name || 'Your') + "'s coaching report")));
+      stepEl.appendChild(el('p', 'lead', esc('From ' + coach.focus.title + '. Read it slowly, then take one small step.')));
+      stepEl.appendChild(el('div', 'disclaimer', 'For educational and informational purposes only. This is not legal, financial, or medical advice.'));
+
+      function section(title, bodyNode) {
+        var sec = el('div', 'report-section');
+        sec.appendChild(el('h3', null, esc(title)));
+        sec.appendChild(bodyNode);
+        return sec;
+      }
+      stepEl.appendChild(section('Your Diagnosis', el('p', null, esc(report.diagnosis))));
+      stepEl.appendChild(section('Your Strategy', el('p', null, esc(report.strategy))));
+
+      var ol = el('ol');
+      report.actionSteps.forEach(function (s) { ol.appendChild(el('li', null, esc(s))); });
+      stepEl.appendChild(section('Your Action Steps', ol));
+
+      var moves = el('div', 'moves');
+      [['This week', report.nextMoves.week], ['This month', report.nextMoves.month], ['This quarter', report.nextMoves.quarter]].forEach(function (m) {
+        var box = el('div', 'move');
+        box.appendChild(el('span', 'when', esc(m[0])));
+        box.appendChild(el('span', null, esc(m[1])));
+        moves.appendChild(box);
+      });
+      stepEl.appendChild(section('Your Next Moves', moves));
+
+      var deeper = el('div', 'claude-block');
+      deeper.appendChild(el('div', 'claude-kicker', 'Your next step'));
+      deeper.appendChild(el('h3', null, 'Go Deeper With Claude'));
+      deeper.appendChild(el('p', 'lead', 'Your report tells you what to do. These ' + prompts.length + ' prompts help you actually do it. Each one is already filled in with your answers, so you can copy, paste, and start straight away.'));
+
+      var actions = el('div', 'claude-actions');
+      var copyAll = el('button', 'btn claude-cta', 'Copy all ' + prompts.length + ' prompts');
+      copyAll.onclick = function () {
+        var all = prompts.map(function (p, i) { return (i + 1) + '. ' + p.title + '\n\n' + p.text; }).join('\n\n-----\n\n');
+        var done = function () {
+          copyAll.textContent = 'Copied, now open Claude';
+          copyAll.classList.add('ok');
+          setTimeout(function () { copyAll.textContent = 'Copy all ' + prompts.length + ' prompts'; copyAll.classList.remove('ok'); }, 2500);
+        };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(all).then(done, function () { fallbackCopy(all); done(); });
+        else { fallbackCopy(all); done(); }
+      };
+      var openClaude = el('a', 'btn secondary claude-open', 'Open Claude');
+      openClaude.href = 'https://claude.ai/new';
+      openClaude.target = '_blank';
+      openClaude.rel = 'noopener noreferrer';
+      actions.appendChild(copyAll);
+      actions.appendChild(openClaude);
+      deeper.appendChild(actions);
+      prompts.forEach(function (p) {
+        var box = el('div', 'prompt');
+        var head = el('div', 'head');
+        head.appendChild(el('h4', null, esc(p.title)));
+        var copy = el('button', 'copy', 'Copy');
+        copy.onclick = (function (text, btn) {
+          return function () {
+            var done = function () { btn.textContent = 'Copied'; btn.classList.add('done'); setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 1800); };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+              navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+            } else { fallbackCopy(text); done(); }
+          };
+        })(p.text, copy);
+        head.appendChild(copy);
+        box.appendChild(head);
+        box.appendChild(el('pre', null, esc(p.text)));
+        deeper.appendChild(box);
+      });
+      stepEl.appendChild(deeper);
+
+      var row = el('div', 'btn-row');
+      var again = el('button', 'btn secondary', '&larr; Change my answers');
+      again.onclick = function () { stepQuestions(); scrollTop(); };
+      var restart = el('button', 'btn secondary', 'Start again');
+      restart.onclick = function () { intake = {}; answers = {}; stepIntake(); scrollTop(); };
+      row.appendChild(again);
+      row.appendChild(restart);
+      stepEl.appendChild(row);
+    }
+
+    stepIntake();
+  }
+
+  if (COACH) renderCoach(COACH);
+})();
+</script>
+</body>
+</html>
